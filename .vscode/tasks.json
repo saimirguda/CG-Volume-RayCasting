@@ -1,0 +1,34 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "create folder",
+            "type": "shell",
+            "command": "cd build && mkdir -p bin",
+            "dependsOrder": "sequence"
+        },
+        {
+            "dependsOn":"create folder",
+            "label": "run cmake",
+            "type": "shell",
+            "command": "cd build/bin && cmake -DCMAKE_BUILD_TYPE=Debug  ../cmake/",
+            "dependsOrder": "sequence"
+        },
+        {
+            "dependsOn":"run cmake",
+            "label": "run make",
+            "type": "shell",
+            "command": "cd build/bin && make -j",
+            "dependsOrder": "sequence"
+        },
+        {
+            "dependsOn":"run make",
+            "label": "create test folder",
+            "type": "shell",
+            "command": "cd output && mkdir -p student && cd student && for i in \"beetle\" \"cross\" \"cubes\" \"engine\" \"male_skull_shading\"; do mkdir -p ${i}; done",
+            "dependsOrder": "sequence"
+        }
+    ]
+}
