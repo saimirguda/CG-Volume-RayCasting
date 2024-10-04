@@ -1,0 +1,66 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "inputs": [
+        {
+          "type": "pickString",
+          "id": "testName",
+          "description": "Config file to run",
+          "options": [
+            "beetle",
+            "cross",
+            "cubes",
+            "engine",
+            "male_skull_shading",
+          ],
+          "default": "cross"
+        }
+    ],
+    "configurations": [
+        {
+            //For other testcases, modify args and preLaunchTask in tasks.json!
+            "preLaunchTask": "create test folder",
+            "name": "Launch Single Test",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/bin/bin/task2",
+            "args": [
+                "--configfile", "configs/${input:testName}.json",
+                "--output", "output/student/${input:testName}/${input:testName}"
+            ],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+        {
+            "preLaunchTask": "run make",
+            "name": "Launch App",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/bin/bin/task2",
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        }
+    ]
+}
