@@ -1,0 +1,58 @@
+image: ${CI_REGISTRY}/icg-docker/cg2-test-system
+stages:
+  - build
+  - test
+  - collect
+
+build:
+  stage: build
+  script:
+    - mkdir -p build/bin && cd build/bin
+    - cmake -DCMAKE_BUILD_TYPE=Release ../cmake
+    - make -j
+    - cd ..
+  tags:
+    - docker,shared
+  artifacts:
+    when: always
+    paths:
+      - build/bin/bin/task2
+    expire_in: 1d
+
+
+
+test:
+  stage: test
+  script:
+    - mkdir -p output/student
+    - mkdir -p output/diffs
+    - ./scripts/run_all.sh
+  tags:
+    - docker,shared
+  dependencies:
+    - build
+  artifacts:
+    when: always
+    paths:
+      - output/student
+      - output/diffs
+      - build/bin/bin/task2
+    expire_in: 1d
+
+
+collect:
+  stage: collect
+  script:
+    - ./scripts/test_all.sh
+    - ./scripts/pixel_diff_count.sh
+  tags:
+    - docker,shared
+  dependencies:
+    - test
+  artifacts:
+    when: always
+    paths:
+      - output/student
+      - output/diffs
+    expire_in: 1d
+  allow_failure: true
